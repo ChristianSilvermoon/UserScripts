@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>UserScripts</title>
+		<meta charset="utf-8"></meta>
+		<style>
+			html {
+				background: radial-gradient(
+					#333 0%,
+					#000 100%
+				);
+				color: #00A7FF;
+				min-height: 100%;
+			}
+			
+			a:link, a:visited {
+				color: #D820B3;
+			}
+			
+
+			a:hover {
+				animation-name: linkHover;
+				animation-duration: 0.5s;
+				animation-direction: alternate;
+				animation-iteration-count: infinite;
+			}
+
+			@keyframes linkHover {
+				0% {
+					color: #D820B3;
+					filter: drop-shadow(0px 0px 8px #D820B3);
+				}
+				
+				100% {
+					color: #EEE;
+					filter: drop-shadow(0px 0px 8px #EEE);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id=Nav><a href="http://ChristianSilvermoon.github.io">Main Page</a> <a href="https://github.com/ChristianSilvermoon/UserScripts">GitHub Repository</a>
+		<center><h1>UserScripts</h1></center>
+		<div id=ScriptList>
+			<h3><a href="https://derpibooru.org" target="_blank">Derpibooru.org</a></h3>
+			<ul>
+				<li>
+					<b>Derpibooru Search Header+ [<a href="https://github.com/ChristianSilvermoon/UserScripts/raw/master/derpibooru.org/Derpibooru%20Header%20Search%20Plus.user.js">Get</a>]</b><br/>
+					Adds functionality from the bottom search bar to the top search bar.<br/>
+					
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>

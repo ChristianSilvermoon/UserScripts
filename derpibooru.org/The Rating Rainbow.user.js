@@ -1,10 +1,16 @@
 // ==UserScript==
 // @name         The Rating Rainbow
-// @namespace    https://christiansilvermoon.github.io/UserScripts/
+// @version      23.7.9
+// @author       Christian "Krissy" Silvermoon
+// @description  Adds Post Rating-based color coding to thumbnails & post pages. See https://derpibooru.org/pages/tags for details.
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAVlJREFUWIXFl81xgzAQhZ8YysgxhaSDNJDUgqnFueXkDtxBGvDRuaSJzcFSWJC0b8EyeTPMYGal97E/YhwACB6n4AkQ4NTQ8xPAFcDZBdFPtz8NIZJOAF7Fgujn5t+NAb4oRDfdtjZfQpR7rXusOYfostidIXYEKEPsDJBD9GZsTTLkz8JYCDzQneJBRAPrxhnIO24HkUfnFRnwmAOAHCOETz4AT8p1jBwrJcnFm9Bb7zBOF1uvtL4Jk8FyY228jJGhmhEbwDIp/V4qjKY5B2DSgDUTArkdQG/snZCmAO6xtEvADyLWB8zcXHfY8C3wvHmKSaYGNAcoLS5ByDBdbL2SrwfSODEIp6mWvwTeTdf0CNZOQe0U3GC8DeBOMx9ArbbsG1DLChnFeA68AXjmuE11AfChM3CZQ1h1tt62NDF67Z9XfAxAgBcAT272Nrr9f+znD/ZXzMD/6Rf2NngPzEexFgAAAABJRU5ErkJggg==
-// @version      19.8.25
-// @description  Adds rating-based color coding to thumbnails & post pages. See https://derpibooru.org/tags/ratings for details.
-// @include      https://derpibooru.org/*
+
+// @namespace    https://christiansilvermoon.github.io/UserScripts/
+// @homepageURL  https://github.com/ChristianSilvermoon/UserScripts
+// @updateURL    https://github.com/ChristianSilvermoon/UserScripts/raw/master/derpibooru.org/The%20Rating%20Rainbow.user.js
+// @downloadaURL https://github.com/ChristianSilvermoon/UserScripts/raw/master/derpibooru.org/The%20Rating%20Rainbow.user.js
+
+// @include      /^https://(www\.|)(derpi|trixie|fur|twi)booru\.org/
 // @grant        none
 // ==/UserScript==
 
@@ -12,24 +18,24 @@
 
     //Edit ONLY the color codes listed here for custom colors.
     const COLORS = {
-        "safe"         : "#418dd9",
-        "questionable" : "#4aa158",
-        "suggestive"   : "#b157b7",
-        "explicit"     : "#d45460",
-        "grotesque"    : "#703800",
-        "semigrim"     : "#b9b541",
-        "grimdark"     : "#d49b39"
+        "safe"         : "#418dd9", // Blue
+        "questionable" : "#4aa158", // Green
+        "suggestive"   : "#b157b7", // Purple
+        "explicit"     : "#d45460", // Red
+        "grotesque"    : "#703800", // Brown
+        "semigrim"     : "#b9b541", // Yellow
+        "grimdark"     : "#d49b39"  // Orange
     }
 
-    /* DEFAULT COLORS
-        const COLORS = {
-        "safe"         : "#418dd9",
-        "questionable" : "#4aa158",
-        "suggestive"   : "#b157b7",
-        "explicit"     : "#d45460",
-        "grotesque"    : "#703800",
-        "semigrim"     : "#b9b541",
-        "grimdark"     : "#d49b39"
+    /* DEFAULT COLORS for reference purposes
+    const COLORS = {
+        "safe"         : "#418dd9", // Blue
+        "questionable" : "#4aa158", // Green
+        "suggestive"   : "#b157b7", // Purple
+        "explicit"     : "#d45460", // Red
+        "grotesque"    : "#703800", // Brown
+        "semigrim"     : "#b9b541", // Yellow
+        "grimdark"     : "#d49b39"  // Orange
     }
     */
 
@@ -71,7 +77,7 @@
     }
 
     //Post Specific Page
-    if ( window.location.href.match( new RegExp('derpibooru.org/[0-9]') ) != null ) {
+    if ( window.location.href.match( new RegExp('derpibooru.org/(images/|)[0-9]') ) != null ) {
         let metabar = document.getElementsByClassName("image-metabar")[1];
         let tagElements = document.getElementsByClassName("tag__name");
         let tags = [];
@@ -113,39 +119,77 @@
         }
     }
 
-    //The Ratings Page
-    if ( window.location.href == "https://derpibooru.org/tags/ratings" ) {
-        let table = document.getElementsByTagName("table")[0];
-        let Links = table.getElementsByTagName("a");
-        let message = document.createElement("span");
-
-        message.innerHTML = "<br/>Tags are Color coded by <b>The Rating Rainbow</b>, a custom UserScript.<br/>You can edit the script to customize the rating colors.<br/><br/>If you feel your copy is out of date, see <a href='https://github.com/ChristianSilvermoon/UserScripts'>The GitHub Page</a>.";
-        table.parentElement.appendChild(message);
-
-        for ( link of Links ) {
-            switch( link.innerHTML ) {
-                case "safe":
-                    link.style.borderBottom = `6px solid ${COLORS.safe}`;
-                    break;
-                case "questionable":
-                    link.style.borderBottom = `6px solid ${COLORS.questionable}`;
-                    break;
-                case "suggestive":
-                    link.style.borderBottom = `6px solid ${COLORS.suggestive}`;
-                    break;
-                case "explicit":
-                    link.style.borderBottom = `6px solid ${COLORS.explicit}`;
-                    break;
-                case "grotesque":
-                    link.style.borderBottom = `6px solid ${COLORS.grotesque}`;
-                    break;
-                case "semi-grimdark":
-                    link.style.borderBottom = `6px solid ${COLORS.semigrim}`;
-                    break;
-                case "grimdark":
-                    link.style.borderBottom = `6px solid ${COLORS.grimdark}`;
-                    break;
-            }
+    //New Ratings Page
+    if ( window.location.href.match( new RegExp('/pages/tags') ) != null ) {
+      let Tags = document.getElementsByClassName("tag");
+      for ( tag of Tags ) {
+        switch( tag.innerText.toLowerCase() ) {
+          case "safe":
+            tag.style.border = `2px solid ${COLORS.safe}`;
+            tag.style.color  = COLORS.safe;
+            break;
+          case "questionable":
+            tag.style.border = `2px solid ${COLORS.questionable}`;
+            tag.style.color  = COLORS.questionable;
+            break;
+          case "suggestive":
+            tag.style.border = `2px solid ${COLORS.suggestive}`;
+            tag.style.color  = COLORS.suggestive;
+            break;
+          case "explicit":
+            tag.style.border = `2px solid ${COLORS.explicit}`;
+            tag.style.color  = COLORS.explicit;
+            break;
+          case "grotesque":
+            tag.style.border = `2px solid ${COLORS.grotesque}`;
+            tag.style.color  = COLORS.grotesque;
+            break;
+          case "semi-grimdark":
+            tag.style.border = `2px solid ${COLORS.semigrim}`;
+            tag.style.color  = COLORS.semigrim;
+            break;
+          case "grimdark":
+            tag.style.border = `2px solid ${COLORS.grimdark}`;
+            tag.style.color  = COLORS.grimdark;
+            break;
         }
+      }
+    }
+
+    // Colorize Ratings Tags on Images As Well
+   if ( window.location.href.match( new RegExp('/(images|)/[0-9]') ) != null ) {
+      let Tags = document.getElementsByClassName("tag dropdown");
+      for ( tag of Tags ) {
+        switch( tag.getAttribute("data-tag-name") ) {
+          case "safe":
+            tag.style.border = `2px solid ${COLORS.safe}`;
+            tag.style.color  = COLORS.safe;
+            break;
+          case "questionable":
+            tag.style.border = `2px solid ${COLORS.questionable}`;
+            tag.style.color  = COLORS.questionable;
+            break;
+          case "suggestive":
+            tag.style.border = `2px solid ${COLORS.suggestive}`;
+            tag.style.color  = COLORS.suggestive;
+            break;
+          case "explicit":
+            tag.style.border = `2px solid ${COLORS.explicit}`;
+            tag.style.color  = COLORS.explicit;
+            break;
+          case "grotesque":
+            tag.style.border = `2px solid ${COLORS.grotesque}`;
+            tag.style.color  = COLORS.grotesque;
+            break;
+          case "semi-grimdark":
+            tag.style.border = `2px solid ${COLORS.semigrim}`;
+            tag.style.color  = COLORS.semigrim;
+            break;
+          case "grimdark":
+            tag.style.border = `2px solid ${COLORS.grimdark}`;
+            tag.style.color  = COLORS.grimdark;
+            break;
+        }
+      }
     }
 })();
